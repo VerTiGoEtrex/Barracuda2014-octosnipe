@@ -1,0 +1,15 @@
+Build
+==================
+Linux/Mac OS X:
+
+Must have cmake and gcc installed.  Tested with cmake 2.8.7 and gcc 4.6.3
+
+# make
+# ./client [ host [ port ] ]
+
+Connects to cuda.contest:9999 by default, can be changed in client.cpp.
+
+
+Windows:
+
+There is a Visual Studio 2012 project in the vs2012/ subdirectory.

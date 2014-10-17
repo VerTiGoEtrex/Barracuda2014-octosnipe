@@ -1,0 +1,8 @@
+client
+**/*.o
+**/*.so
+**/CMakeCache.txt
+**/CMakeFiles/
+**/*.cmake
+jsoncpp/**/Makefile
+jsoncpp/lib
