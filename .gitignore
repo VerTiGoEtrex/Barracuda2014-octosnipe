@@ -6,3 +6,4 @@ client
 **/*.cmake
 jsoncpp/**/Makefile
 jsoncpp/lib
+.settings
