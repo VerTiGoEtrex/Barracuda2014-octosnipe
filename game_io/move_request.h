@@ -14,4 +14,6 @@ class move_request {
         void set_move_request(Json::Value);
 
         game_state *state;
+
+        friend ostream& operator<<(ostream &os, const move_request &mr);
 };

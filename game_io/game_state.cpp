@@ -78,3 +78,23 @@ void game_state::set_game_state(Json::Value message) {
         this->their_tokens = state["opponent_tokens"].asInt();
     //this->opponent_id = state["opponent_id"].asInt();
 }
+
+ostream& operator<<(ostream &os, const game_state &gs) {
+	os << "GAME STATE" << endl;
+	os << "Game id: " << gs.game_id << endl;
+	os << "Opponent id: " << gs.opponent_id << endl;
+	os << "Player number: " << gs.player_number << endl;
+	os << "Remaining time: " << gs.time_remaining_ns << endl;
+	os << "Number of legal moves: " << gs.legal_moves.size() << endl;
+	os << "Our points: " << gs.your_points << endl;
+	os << "Our tokens: " << gs.your_tokens << endl;
+	os << "Their points: " << gs.their_points << endl;
+	os << "Their tokens: " << gs.their_tokens << endl;
+	return os;
+}
+
+ostream& operator<<(ostream &os, const board_point &bp) {
+	os << "BOARD POINT" << endl;
+	os << "(" << bp.x << ", " << bp.y << ", " << bp.z << ")" << endl;
+	return os;
+}

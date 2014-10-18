@@ -8,6 +8,7 @@ using namespace std;
 
 struct board_point {
     unsigned int x, y, z;
+    friend ostream& operator<<(ostream &os, const board_point &bp);
 };
 
 class game_state {
@@ -28,4 +29,6 @@ class game_state {
         int their_tokens;
         unsigned long long time_remaining_ns;
         int moves_remaining;
+
+        friend ostream& operator<<(ostream &os, const game_state &gs);
 };
