@@ -14,7 +14,7 @@ GameTreeState::GameTreeState() {
 	tokens[0] = 1;
 	tokens[1] = 1;
 
-	for (int i = 0; i < state.locations.size(); ++i) {
+	for (int i = 0; i < 220; ++i) {
 		state.locations[i] = Owner::UNOWNED;
 	}
 }
@@ -48,7 +48,6 @@ GameTreeState::GameTreeState(const GameTreeState &original) :
 
 int GameTreeState::getHeuristicValue() {
 	int dim = state.getDim();
-	int validBallLen = state.locations.size();
 	int h = 0;
 	for (int z = 0; z < dim; ++z) {
 		for (int y = 0; y < dim - z; ++y) {
@@ -69,14 +68,6 @@ int GameTreeState::getHeuristicValue() {
 					--h;
 				}
 			}
-		}
-	}
-
-	for (int i = 0; i < validBallLen; ++i) {
-		if (state.locations[i] == Owner::WHITE) {
-			++h;
-		} else if (state.locations[i] == Owner::BLACK) {
-			--h;
 		}
 	}
 
@@ -131,8 +122,7 @@ std::vector<Move> GameTreeState::getMoves() {
 
 	// Figure out what we can claim
 	int dim = state.getDim();
-	int validBallLen = state.locations.size();
-	vector<bool> validBall(validBallLen, false);
+	bool validBall[220];
 
 	// Fill in the table
 	for (int z = 0; z < min(dim, tokens[turn]); ++z) {
