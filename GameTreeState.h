@@ -23,27 +23,14 @@ struct Move {
 
 struct Tetrahedron {
 	std::array<Owner, 220> locations;
-	int dim;
+	const int dim = 10;
 
-	Tetrahedron() : dim(10) {}
+	Tetrahedron() {}
 
-	Tetrahedron(const Tetrahedron& other)
-	: dim(other.dim) {
+	Tetrahedron(const Tetrahedron& other) {
 		std::copy(other.locations.begin(), other.locations.end(), locations.begin());
 	}
 
-	Tetrahedron (Tetrahedron&& other) {
-		swap(other);
-	}
-	Tetrahedron& operator= (Tetrahedron&& other) {
-		swap(other);
-		return *this;
-	}
-	Tetrahedron& operator= (const Tetrahedron& other) {
-		Tetrahedron otherCopy(other);
-		swap(otherCopy);
-		return *this;
-	}
 	Owner& owner(int x, int y, int z) {
 		assert ((x+y+z) < dim);
 		return locations[getCoord(x, y, z)];
@@ -65,10 +52,6 @@ struct Tetrahedron {
 	}
 	int getDim() {
 		return dim;
-	}
-	void swap (Tetrahedron& other) {
-		std::swap(locations, other.locations);
-		std::swap(dim, other.dim);
 	}
 };
 
