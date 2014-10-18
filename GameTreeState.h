@@ -82,6 +82,8 @@ public:
 	int getHeuristicValue();
 	std::vector<Move> getMoves();
 	void applyMove(Move m);
+	Owner getTurn();
+	bool gameOver();
 private:
 	Owner turn;
 
