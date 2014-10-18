@@ -96,7 +96,7 @@ Json::Value json_socket::recv_msg() {
     int bytes_read = 0;
 
     while (bytes_read < jsonsize) {
-        s = recv(this->bsock_fd, jsonstr+bytes_read, jsonsize, 0);
+        s = recv(this->bsock_fd, jsonstr, jsonsize, 0);
 
         if (s <= 0) {
             delete[] jsonstr;
