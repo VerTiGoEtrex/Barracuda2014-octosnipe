@@ -20,20 +20,16 @@ struct Move {
 	Move(int x, int y, int z) : claim(true), x(x), y(y), z(z) {}
 };
 
-class Tetrahedron {
-public:
-	Tetrahedron(int dim) : dim(dim), locationsLen(getCoord(dim-1, dim-1, dim-1) + 1) {
-		locations = std::unique_ptr<Owner>(new Owner[locationsLen]);
-	}
+struct Tetrahedron {
+	std::vector<Owner> locations;
+	int dim;
 
-	Tetrahedron() : dim(0), locationsLen(0), locations() {}
+	Tetrahedron(int dim) : dim(dim), locations(getCoord(0, 0, dim-1)) {}
+	Tetrahedron() : dim(0), locations() {}
 
 	Tetrahedron(const Tetrahedron& other)
-	: dim(other.dim), locationsLen(other.locationsLen) {
+	: dim(other.dim), locations(other.locations) {}
 
-		locations = std::unique_ptr<Owner>(new Owner[locationsLen]);
-		std::copy(other.locations.get(), other.locations.get() + other.locationsLen, locations.get());
-	}
 	Tetrahedron (Tetrahedron&& other) {
 		swap(other);
 	}
@@ -46,12 +42,11 @@ public:
 		swap(otherCopy);
 		return *this;
 	}
-	Owner& getOwner(int x, int y, int z) {
-		return locations.get()[getCoord(x, y, z)];
+	Owner& owner(int x, int y, int z) {
+		assert ((x+y+z) < dim);
+		return locations[getCoord(x, y, z)];
 	}
 	int getCoord(int x, int y, int z) {
-		assert ((x+y+z) < dim);
-
 		int coord = 0;
 		int levelDim = dim - z;
 
@@ -69,18 +64,10 @@ public:
 	int getDim() {
 		return dim;
 	}
-	std::unique_ptr<Owner> locations;
-private:
 	void swap (Tetrahedron& other) {
 		std::swap(locations, other.locations);
 		std::swap(dim, other.dim);
-		std::swap(locationsLen, other.locationsLen);
 	}
-
-	int dim;
-	int locationsLen;
-
-
 };
 
 class GameTreeState {

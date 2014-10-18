@@ -38,6 +38,7 @@ int minimax(GameTreeState& state, int remainingDepth, int alpha, int beta) {
 	if (remainingDepth == 0 || state.gameOver())
 		return state.getHeuristicValue();
 
+
 	if (state.getTurn() == Owner::WHITE) {
 		// Maximize
 		int bestSoFar = numeric_limits<int>::min();
