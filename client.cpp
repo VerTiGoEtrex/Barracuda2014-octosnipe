@@ -23,7 +23,7 @@ move_response* client::move(move_request* req) {
 	cout << *req << endl;
 	cout << OD;
 
-	GameTreeState currentState();
+	GameTreeState currentState(req->state);
 
 
 	// LE
@@ -47,18 +47,21 @@ void client::server_greeting(greeting* greet) {
 
 void client::game_over(game_result* r) {
 	cout << OD;
+	cout << "*** GAME OVER ***" << endl;
     cout << *r << endl;
     cout << OD;
 }
 
 void client::hand_done(move_result* r) {
     cout << OD;
+    cout << "*** HAND DONE ***" << endl;
     cout << *r << endl;
     cout << OD;
 }
 
 void client::move_received(move_result* r) {
 	cout << OD;
+	cout << "*** MOVE RECV ***" << endl;
     cout << *r << endl;
     cout << OD;
 }
