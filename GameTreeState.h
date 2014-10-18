@@ -85,7 +85,7 @@ private:
 
 class GameTreeState {
 public:
-	GameTreeState();
+	GameTreeState(game_state &state);
 	GameTreeState(GameTreeState& original);
 	int getHeuristicValue();
 	std::vector<Move> getMoves();
@@ -97,6 +97,7 @@ private:
 	Owner turn;
 	int tokens[2];
 	Tetrahedron state;
+	int turnsLeft;
 };
 
 #endif

@@ -8,6 +8,8 @@
 
 #include "client.h"
 #include "json_socket/json_socket.h"
+#include "MiniMax.h"
+#include "GameTreeState.h"
 
 #define OD "==============================\n"
 
@@ -21,10 +23,12 @@ move_response* client::move(move_request* req) {
 	cout << *req << endl;
 	cout << OD;
 
+	GameTreeState currentState();
+
+
 	// LE
 	// BARRACUDA
 	// CODE
-
     if (random_wait(random_generator))
         return new wait_response();
     else {

@@ -8,8 +8,11 @@
 
 using namespace std;
 
-GameTreeState::GameTreeState() :
-		turn(Owner::WHITE), state(), tokens{0, 0} {
+GameTreeState::GameTreeState(game_state &state) {
+	turnsLeft = state.moves_remaining;
+	switch (state.player_number) {
+
+	}
 }
 
 GameTreeState::GameTreeState(GameTreeState &original) :
@@ -19,7 +22,7 @@ GameTreeState::GameTreeState(GameTreeState &original) :
 
 int GameTreeState::getHeuristicValue() {
 	int dim = state.getDim();
-	int validBallLen = state.getCoord(dim - 1, dim - 1, dim - 1) + 1;
+	int validBallLen = state.getCoord(0, 0, dim - 1) + 1;
 
 	int h = 0;
 	int unfilledBot = ((dim+1) * dim) / 2;
@@ -34,7 +37,7 @@ int GameTreeState::getHeuristicValue() {
 		}
 	}
 
-	if (!unfilledBot) {
+	if (!unfilledBot || !turnsLeft) {
 		if (h > 0)
 			return 10000;
 		else
@@ -70,6 +73,9 @@ void GameTreeState::applyMove(Move &m) {
 		turn = Owner::BLACK;
 	else
 		turn = Owner::WHITE;
+
+	//Deduct turns
+	turnsLeft--;
 }
 
 std::vector<Move> GameTreeState::getMoves() {
@@ -80,7 +86,7 @@ std::vector<Move> GameTreeState::getMoves() {
 
 	// Figure out what we can claim
 	int dim = state.getDim();
-	int validBallLen = state.getCoord(dim - 1, dim - 1, dim - 1) + 1;
+	int validBallLen = state.getCoord(0, 0, dim - 1) + 1;
 	unique_ptr<bool> validBall(new bool[validBallLen]);
 
 	// Fill in the table
@@ -123,6 +129,9 @@ Owner GameTreeState::getTurn(){
 }
 
 bool GameTreeState::gameOver(){
+	if (!turnsLeft) {
+		return true;
+	}
 	int dim = state.getDim();
 	int h = 0;
 	int unfilledBot = ((dim+1) * dim) / 2;
