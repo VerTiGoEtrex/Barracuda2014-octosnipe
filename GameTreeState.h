@@ -25,7 +25,8 @@ struct Tetrahedron {
 	std::array<Owner, 220> locations;
 	const int dim = 10;
 
-	Tetrahedron() {}
+	Tetrahedron() {
+	}
 
 	Tetrahedron(const Tetrahedron& other) {
 		std::copy(other.locations.begin(), other.locations.end(), locations.begin());
