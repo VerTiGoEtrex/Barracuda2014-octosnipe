@@ -22,18 +22,14 @@ struct Move {
 };
 
 struct Tetrahedron {
-	vector<Owner> locations;
+	std::array<Owner, 220> locations;
 	const int dim = 10;
 
-	Tetrahedron() {
-		locations.resize(220);
-	}
+	Tetrahedron() {}
 
 	Tetrahedron(const Tetrahedron& other) {
-		locations.resize(220);
 		std::copy(other.locations.begin(), other.locations.end(), locations.begin());
 	}
-
 
 	Owner& owner(int x, int y, int z) {
 		assert ((x+y+z) < dim);
