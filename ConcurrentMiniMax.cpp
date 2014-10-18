@@ -25,7 +25,7 @@ pair<int, Move> getBestMoveConcurrent(GameTreeState& state, int maxDepth) {
 	queue<QueueItem> miniMaxes;
 	mutex queueLock;
 
-	int alpha;
+	int alpha = numeric_limits<int>::min();
 	Move bestMove;
 	mutex alphaLock;
 
