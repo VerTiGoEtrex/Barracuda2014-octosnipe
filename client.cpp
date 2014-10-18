@@ -27,7 +27,7 @@ void client::error(error_msg* err) {
 void runnerFn(GameTreeState &s, move_response *&r, int turnsLeft) {
 	int i = 2;
 	for (int i = 2; i <= turnsLeft; ++i) {
-		auto res = getBestMoveConcurrent(s, i);
+		auto res = getBestMove(s, i);
 		if (haltarino)
 			return;
 
