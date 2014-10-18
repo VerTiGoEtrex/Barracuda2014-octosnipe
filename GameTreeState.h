@@ -88,7 +88,7 @@ public:
 	GameTreeState();
 	GameTreeState(GameTreeState& original);
 	int getHeuristicValue();
-	std::vector<Move> getMoves()
+	std::vector<Move> getMoves();
 	void applyMove(Move &m);
 	Owner getTurn();
 	bool gameOver();

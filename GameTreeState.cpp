@@ -22,10 +22,10 @@ int GameTreeState::getHeuristicValue() {
 	int validBallLen = state.getCoord(dim - 1, dim - 1, dim - 1) + 1;
 
 	int h = 0;
-	int unfilledBot = ((dim-1) * dim) / 2;
+	int unfilledBot = ((dim+1) * dim) / 2;
 	for (int i = 0; i < validBallLen; ++i) {
-		if (i < ((dim-1) * dim) / 2 && state.locations[i] != Owner::UNOWNED) {
-			++unfilledBot;
+		if (i < ((dim+1) * dim) / 2 && state.locations[i] != Owner::UNOWNED) {
+			--unfilledBot;
 		}
 		if (state.locations[i] == Owner::WHITE) {
 			++h;
@@ -116,5 +116,21 @@ std::vector<Move> GameTreeState::getMoves() {
 		}
 	}
 	return moves;
+}
+
+Owner GameTreeState::getTurn(){
+	return turn;
+}
+
+bool GameTreeState::gameOver(){
+	int dim = state.getDim();
+	int h = 0;
+	int unfilledBot = ((dim+1) * dim) / 2;
+	for (int i = 0; i < unfilledBot; ++i) {
+		if (state.locations[i] != Owner::UNOWNED) {
+			--unfilledBot;
+		}
+	}
+	return !unfilledBot;
 }
 
