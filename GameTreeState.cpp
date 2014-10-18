@@ -44,6 +44,7 @@ GameTreeState::GameTreeState(game_state &gameState) {
 GameTreeState::GameTreeState(const GameTreeState &original) :
 				turn(original.turn), state(original.state), turnsLeft(original.turnsLeft) {
 	copy(original.tokens, original.tokens + 2, tokens);
+	state(original.state);
 }
 
 int GameTreeState::getHeuristicValue() {
