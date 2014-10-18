@@ -14,6 +14,6 @@ move_request::~move_request() {
 
 ostream& operator<<(ostream &os, const move_request &mr) {
 	os << "MOVE REQUEST" << endl;
-	os << mr.state << endl;
+	os << *mr.state << endl;
 	return os;
 }

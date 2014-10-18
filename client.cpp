@@ -24,9 +24,9 @@ void client::error(error_msg* err) {
 	throw GameError();
 }
 
-void runnerFn(GameTreeState &s, move_response *r) {
+void runnerFn(GameTreeState &s, move_response *&r, int turnsLeft) {
 	int i = 2;
-	while (true) {
+	for (int i = 2; i <= turnsLeft; ++i) {
 		auto res = getBestMoveConcurrent(s, i);
 		if (haltarino)
 			return;
@@ -44,8 +44,8 @@ void runnerFn(GameTreeState &s, move_response *r) {
 			r = new take_space_response(p);
 		}
 		cout << "Current depth: " << i << endl;
-		++i;
 	}
+	haltarino.store(true);
 }
 
 move_response* client::move(move_request* req) {
@@ -59,18 +59,20 @@ move_response* client::move(move_request* req) {
 	GameTreeState currentState(*req->state);
 
 	move_response* r;
-	thread runner(runnerFn, std::ref(currentState), r);
+	thread runner(runnerFn, std::ref(currentState), std::ref(r), req->state->moves_remaining + 1);
 	chrono::nanoseconds time_span;
 	do {
-		chrono::high_resolution_clock::time_point t2 = chrono::high_resolution_clock::now();
-
-		time_span = chrono::duration_cast<chrono::nanoseconds>(t2 - t1);
 		chrono::milliseconds dura(5);
 		this_thread::sleep_for(dura);
-	} while (time_span.count() < min(req->state->time_remaining_ns, (unsigned long long) 10000000));
-	haltarino.store(true);
-    runner.join();
 
+		chrono::high_resolution_clock::time_point t2 = chrono::high_resolution_clock::now();
+		time_span = chrono::duration_cast<chrono::nanoseconds>(t2 - t1);
+	} while (!haltarino.load() && time_span.count() < min(req->state->time_remaining_ns, (unsigned long long) 100 * 1000000));
+	haltarino.store(true);
+	cout << "Joining" << endl;
+    runner.join();
+    cout << "Joined. Response " << (r ? "is not" : "is") <<  " null." << endl;
+    //cout << "R: " << r->json_root["type"] << endl;
 	return r;
 
 	// LE
@@ -84,7 +86,6 @@ move_response* client::move(move_request* req) {
 		return new take_space_response(req->state->legal_moves[random_space(random_generator)]);
 	}
 	 */
-
 }
 
 void client::server_greeting(greeting* greet) {
@@ -111,7 +112,7 @@ void client::hand_done(move_result* r) {
 void client::move_received(move_result* r) {
 	cout << OD;
 	cout << "*** MOVE RECV ***" << endl;
-	cout << *r << endl;
+	//cout << *r << endl;
 	cout << OD;
 }
 

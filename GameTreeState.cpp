@@ -65,6 +65,8 @@ int GameTreeState::getHeuristicValue() {
 	if (gameOver()) {
 		if (h > 0)
 			return 10000;
+		else if (h == 0)
+			return 0;
 		else
 			return -10000;
 	}

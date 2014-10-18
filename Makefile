@@ -25,10 +25,11 @@ LD_FLAGS_EXTRA=-Wl,-rpath,$(DIR)/json_socket,-rpath,$(DIR)/game_io
 endif
 
 client: client.h client.cpp jsoncpp json_socket game_io MiniMax.o GameTreeState.o ConcurrentMiniMax.o
-	g++ -g -std=c++11 $(LD_FLAGS_EXTRA) -o $@ $(INCLUDE_PATH) $(LIBRARY_PATH) client.cpp MiniMax.o GameTreeState.o ConcurrentMiniMax.o $(USELIBS)
+	g++ -O3 -std=c++11 $(LD_FLAGS_EXTRA) -o $@ $(INCLUDE_PATH) $(LIBRARY_PATH) client.cpp MiniMax.o GameTreeState.o ConcurrentMiniMax.o $(USELIBS) -pthread -Wl,--no-as-needed
+
 	
 %.o: %.cpp
-	g++ -g -std=c++11 -c $< $(INCLUDE_PATH) $(LIBRARY_PATH) -pthread -Wl,--no-as-needed
+	g++ -O3 -std=c++11 -c $< $(INCLUDE_PATH) $(LIBRARY_PATH) -pthread -Wl,--no-as-needed
 
 json_socket:
 	cd json_socket && $(MAKE)
