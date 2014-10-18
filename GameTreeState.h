@@ -22,16 +22,13 @@ struct Move {
 };
 
 struct Tetrahedron {
-	std::vector<Owner> locations;
-	int dim;
+	std::array<Owner, 220> locations;
+	const int dim = 10;
 
-	Tetrahedron(int dim) : dim(dim) {
-		locations.resize(getCoord(0, 0, dim-1) + 1);
-	}
-	Tetrahedron() : dim(0), locations() {}
+	Tetrahedron() {}
 
 	Tetrahedron(const Tetrahedron& other)
-	: dim(other.dim), locations(other.locations) {}
+	: locations(other.locations) {}
 
 	Tetrahedron (Tetrahedron&& other) {
 		swap(other);
@@ -69,7 +66,6 @@ struct Tetrahedron {
 	}
 	void swap (Tetrahedron& other) {
 		std::swap(locations, other.locations);
-		std::swap(dim, other.dim);
 	}
 };
 
