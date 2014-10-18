@@ -6,6 +6,7 @@
 #include <memory>
 #include <algorithm>
 #include <utility>
+#include "game_io/game_state.h"
 
 enum Owner {
 	WHITE = 0,
@@ -72,7 +73,7 @@ struct Tetrahedron {
 
 class GameTreeState {
 public:
-	GameTreeState();
+	GameTreeState(game_state &gameState);
 	GameTreeState(GameTreeState& original);
 	int getHeuristicValue();
 	std::vector<Move> getMoves();
@@ -84,6 +85,7 @@ private:
 	Owner turn;
 	int tokens[2];
 	Tetrahedron state;
+	int turnsLeft;
 };
 
 #endif
