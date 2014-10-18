@@ -77,7 +77,7 @@ class GameTreeState {
 public:
 	GameTreeState();
 	GameTreeState(game_state &gameState);
-	GameTreeState(GameTreeState& original);
+	GameTreeState(const GameTreeState& original);
 	int getHeuristicValue();
 	std::vector<Move> getMoves();
 	void applyMove(Move &m);

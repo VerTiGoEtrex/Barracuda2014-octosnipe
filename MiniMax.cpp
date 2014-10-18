@@ -4,9 +4,11 @@
 #include <cassert>
 #include <limits>
 
+
 using namespace std;
 
 int minimax(GameTreeState& state, int remainingDepth, int alpha, int beta);
+
 
 pair<int, Move> getBestMove(GameTreeState& state, int maxDepth) {
 	assert (state.getTurn() == Owner::WHITE);
@@ -46,6 +48,9 @@ int minimax(GameTreeState& state, int remainingDepth, int alpha, int beta) {
 
 		auto moves = state.getMoves();
 		for (auto it = moves.rbegin(); it != moves.rend(); ++it) {
+			if (haltarino) {
+				return bestSoFar;
+			}
 			auto m = *it;
 			GameTreeState newState {state};
 			newState.applyMove(m);
@@ -67,6 +72,9 @@ int minimax(GameTreeState& state, int remainingDepth, int alpha, int beta) {
 
 		auto moves = state.getMoves();
 		for (auto it = moves.rbegin(); it != moves.rend(); ++it) {
+			if (haltarino) {
+				return worstSoFar;
+			}
 			auto m = *it;
 			GameTreeState newState {state};
 			newState.applyMove(m);
