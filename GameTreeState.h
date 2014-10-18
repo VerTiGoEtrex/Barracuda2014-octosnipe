@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <utility>
 
-enum class Owner {
+enum Owner {
 	WHITE = 0,
 	BLACK = 1,
 	UNOWNED = 2
@@ -16,8 +16,8 @@ enum class Owner {
 struct Move {
 	bool claim; // Wait when claim == false
 	int x, y, z;
-	Move() : claim(false){}
-	Move(x, y, z) : claim(true), x(x), y(y), z(z){}
+	Move() : claim(false) {}
+	Move(int x, int y, int z) : claim(true), x(x), y(y), z(z) {}
 };
 
 class Tetrahedron {
@@ -93,7 +93,7 @@ public:
 	Owner getTurn();
 	bool gameOver();
 private:
-	bool canClaim(Owner &owner, unique_ptr<bool*> &validBall);
+	bool canClaim(Owner &owner, std::unique_ptr<bool> &validBall);
 	Owner turn;
 	int tokens[2];
 	Tetrahedron state;
