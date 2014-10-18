@@ -11,10 +11,10 @@ using namespace std;
 GameTreeState::GameTreeState() {
 	turnsLeft = 99;
 	turn = Owner::WHITE;
-	tokens[0] = 5;
-	tokens[1] = 5;
+	tokens[0] = 1;
+	tokens[1] = 1;
 
-	state = Tetrahedron(10);
+	state = Tetrahedron(1);
 	for (int i = 0; i < state.locations.size(); ++i) {
 		state.locations[i] = Owner::UNOWNED;
 	}

@@ -61,13 +61,15 @@ move_response* client::move(move_request* req) {
 	move_response* r;
 	thread runner(runnerFn, std::ref(currentState), std::ref(r), req->state->moves_remaining + 1);
 	chrono::nanoseconds time_span;
-	do {
-		chrono::milliseconds dura(5);
-		this_thread::sleep_for(dura);
-
-		chrono::high_resolution_clock::time_point t2 = chrono::high_resolution_clock::now();
-		time_span = chrono::duration_cast<chrono::nanoseconds>(t2 - t1);
-	} while (!haltarino.load() && time_span.count() < min(req->state->time_remaining_ns, (unsigned long long) 100 * 1000000));
+	unsigned long long remainingMiliseconds = (req->state->time_remaining_ns / 1000000) * (0.05);
+	this_thread::sleep_for(chrono::milliseconds(remainingMiliseconds));
+//	do {
+//		chrono::milliseconds dura(5);
+//		this_thread::sleep_for(dura);
+//
+//		chrono::high_resolution_clock::time_point t2 = chrono::high_resolution_clock::now();
+//		time_span = chrono::duration_cast<chrono::milliseconds>(t2 - t1);
+//	} while (!haltarino.load() && time_span.count() < timeLimit);
 	haltarino.store(true);
 	cout << "Joining" << endl;
     runner.join();
