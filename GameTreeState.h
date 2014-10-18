@@ -6,6 +6,7 @@
 #include <memory>
 #include <algorithm>
 #include <utility>
+#include "game_io/game_state.h"
 
 enum Owner {
 	WHITE = 0,
@@ -85,7 +86,7 @@ private:
 
 class GameTreeState {
 public:
-	GameTreeState(game_state &state);
+	GameTreeState(game_state &gameState);
 	GameTreeState(GameTreeState& original);
 	int getHeuristicValue();
 	std::vector<Move> getMoves();

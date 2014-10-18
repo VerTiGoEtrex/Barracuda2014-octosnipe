@@ -28,7 +28,7 @@ client: client.h client.cpp jsoncpp json_socket game_io MiniMax.o GameTreeState.
 	g++ -g -std=c++0x $(LD_FLAGS_EXTRA) -o $@ $(INCLUDE_PATH) $(LIBRARY_PATH) client.cpp $(USELIBS)
 	
 %.o: %.cpp
-	g++ -g -std=c++11 -c $<
+	g++ -g -std=c++11 -c $< $(INCLUDE_PATH) $(LIBRARY_PATH)
 
 json_socket:
 	cd json_socket && $(MAKE)

@@ -8,10 +8,26 @@
 
 using namespace std;
 
-GameTreeState::GameTreeState(game_state &state) {
-	turnsLeft = state.moves_remaining;
-	switch (state.player_number) {
+GameTreeState::GameTreeState(game_state &gameState) {
+	turnsLeft = gameState.moves_remaining;
+	turn = Owner::WHITE;
+	tokens[Owner::WHITE] = gameState.your_tokens;
+	tokens[Owner::BLACK] = gameState.their_tokens;
 
+	//Setup the board
+	state = Tetrahedron(gameState.board.size());
+	for (int x = 0; x < gameState.board.size(); ++x) {
+		for (int y = 0; y < gameState.board[x].size(); ++y) {
+			for (int z = 0; z < gameState.board[x][y].size(); ++z) {
+				if (gameState.board[x][y][z] == 0) {
+					state.getOwner(x, y, z) = Owner::UNOWNED;
+				} else if (gameState.board[x][y][z] == gameState.player_number) {
+					state.getOwner(x, y, z) = Owner::WHITE;
+				} else {
+					state.getOwner(x, y, z) = Owner::BLACK;
+				}
+			}
+		}
 	}
 }
 
