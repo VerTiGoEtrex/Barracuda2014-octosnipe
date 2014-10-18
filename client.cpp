@@ -9,34 +9,54 @@
 #include "client.h"
 #include "json_socket/json_socket.h"
 
+#define OD "==============================\n"
+
 void client::error(error_msg* err) {
     cout << "error: " << err->message << endl;
     throw GameError();
 }
 
 move_response* client::move(move_request* req) {
+	cout << OD;
+	cout << *req << endl;
+	cout << OD;
+
+	// LE
+	// BARRACUDA
+	// CODE
+
     if (random_wait(random_generator))
         return new wait_response();
     else {
         uniform_int_distribution<int> random_space(0, req->state->legal_moves.size() - 1);
         return new take_space_response(req->state->legal_moves[random_space(random_generator)]);
     }
+
 }
 
 void client::server_greeting(greeting* greet) {
+	cout << OD;
     cout << "Connected to server." << endl;
+    cout << "Team: " << greet->team_id << endl;
+    cout << OD;
 }
 
 void client::game_over(game_result* r) {
-    // left blank for you
+	cout << OD;
+    cout << *r << endl;
+    cout << OD;
 }
 
 void client::hand_done(move_result* r) {
-    // left blank for you
+    cout << OD;
+    cout << *r << endl;
+    cout << OD;
 }
 
 void client::move_received(move_result* r) {
-    // left blank for you
+	cout << OD;
+    cout << *r << endl;
+    cout << OD;
 }
 
 int main(int argc, char * argv[]) {

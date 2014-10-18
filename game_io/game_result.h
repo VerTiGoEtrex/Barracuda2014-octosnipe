@@ -12,4 +12,6 @@ class game_result {
 
         game_state *state;
         unsigned int winner;
+
+        friend ostream& operator<<(ostream &os, const game_result &gr);
 };

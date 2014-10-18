@@ -25,3 +25,10 @@ move_result::~move_result() {
     delete this->state;
     delete this->claimed;
 }
+
+ostream& operator<<(ostream &os, const move_result &mr) {
+	os << "MOVE RESULT" << endl;
+	os << *mr.claimed << endl;
+	os << *mr.state << endl;
+	return os;
+}

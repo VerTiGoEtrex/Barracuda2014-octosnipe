@@ -12,3 +12,10 @@ void game_result::set_game_result(Json::Value result) {
 game_result::~game_result() {
     delete this->state;
 }
+
+ostream& operator<<(ostream &os, const game_result &gr) {
+	os << "GAME RESULT" << endl;
+	os << "winner: " << gr.winner << endl;
+	os << *gr.state << endl;
+	return os;
+}

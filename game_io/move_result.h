@@ -11,4 +11,6 @@ class move_result {
 
         game_state *state;
         board_point *claimed;
+
+        friend ostream& operator<<(ostream &os, const move_result &mr);
 };
