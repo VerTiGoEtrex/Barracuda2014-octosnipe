@@ -49,6 +49,9 @@ void runnerFn(GameTreeState &s, move_response *&r, int turnsLeft) {
 }
 
 move_response* client::move(move_request* req) {
+	if (req->state->legal_moves.size() == 0) {
+		return new wait_response();
+	}
 	haltarino.store(false);
 	chrono::high_resolution_clock::time_point t1 = chrono::high_resolution_clock::now();
 
