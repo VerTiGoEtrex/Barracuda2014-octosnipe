@@ -43,7 +43,7 @@ void runnerFn(GameTreeState &s, move_response *&r, int turnsLeft) {
 			p.z = res.second.z;
 			r = new take_space_response(p);
 		}
-		cout << "Current depth: " << i << endl;
+		//cout << "Current depth: " << i << endl;
 	}
 	haltarino.store(true);
 }
@@ -55,16 +55,16 @@ move_response* client::move(move_request* req) {
 	haltarino.store(false);
 	chrono::high_resolution_clock::time_point t1 = chrono::high_resolution_clock::now();
 
-	cout << OD;
-	cout << *req << endl;
-	cout << OD;
+	//cout << OD;
+	//cout << *req << endl;
+	//cout << OD;
 
 	GameTreeState currentState(*req->state);
 
 	move_response* r;
 	thread runner(runnerFn, std::ref(currentState), std::ref(r), req->state->moves_remaining + 1);
 	chrono::nanoseconds time_span;
-	unsigned long long remainingMiliseconds = (req->state->time_remaining_ns / 1000000) * (0.05);
+	unsigned long long remainingMiliseconds = (req->state->time_remaining_ns / 1000000) * (0.08);
 	this_thread::sleep_for(chrono::milliseconds(remainingMiliseconds));
 //	do {
 //		chrono::milliseconds dura(5);
@@ -74,9 +74,9 @@ move_response* client::move(move_request* req) {
 //		time_span = chrono::duration_cast<chrono::milliseconds>(t2 - t1);
 //	} while (!haltarino.load() && time_span.count() < timeLimit);
 	haltarino.store(true);
-	cout << "Joining" << endl;
+	//cout << "Joining" << endl;
     runner.join();
-    cout << "Joined. Response " << (r ? "is not" : "is") <<  " null." << endl;
+    //cout << "Joined. Response " << (r ? "is not" : "is") <<  " null." << endl;
     //cout << "R: " << r->json_root["type"] << endl;
 	return r;
 
@@ -108,17 +108,17 @@ void client::game_over(game_result* r) {
 }
 
 void client::hand_done(move_result* r) {
-	cout << OD;
-	cout << "*** HAND DONE ***" << endl;
-	cout << *r << endl;
-	cout << OD;
+	//cout << OD;
+	//cout << "*** HAND DONE ***" << endl;
+	//cout << *r << endl;
+	//cout << OD;
 }
 
 void client::move_received(move_result* r) {
-	cout << OD;
-	cout << "*** MOVE RECV ***" << endl;
+	//cout << OD;
+	//cout << "*** MOVE RECV ***" << endl;
 	//cout << *r << endl;
-	cout << OD;
+	//cout << OD;
 }
 
 int main(int argc, char * argv[]) {

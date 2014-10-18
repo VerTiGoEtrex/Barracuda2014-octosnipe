@@ -6,6 +6,8 @@
  */
 #include "GameTreeState.h"
 
+#include <cstdlib>
+
 using namespace std;
 
 GameTreeState::GameTreeState() {
@@ -66,6 +68,11 @@ int GameTreeState::getHeuristicValue() {
 							&& state.owner(x, y+1, z-1) == Owner::BLACK) {
 						owner = Owner::BLACK;
 					}
+					int distFromMiddle = abs(x - ((dim - z)/3)) + abs(y - ((dim - z)/3));
+					if (owner == Owner::WHITE)
+						h-=distFromMiddle;
+					else if (owner == Owner::BLACK)
+						h+=distFromMiddle;
 				}
 			}
 		}
@@ -73,19 +80,19 @@ int GameTreeState::getHeuristicValue() {
 
 	for (int i = 0; i < 220; ++i) {
 		if (state.locations[i] == Owner::WHITE) {
-			++h;
+			h+=1000;
 		} else if (state.locations[i] == Owner::BLACK) {
-			--h;
+			h-=1000;
 		}
 	}
 
 	if (gameOver()) {
 		if (h > 0)
-			return 10000;
+			return 10000000;
 		else if (h == 0)
 			return 0;
 		else
-			return -10000;
+			return -10000000;
 	}
 
 	return h;

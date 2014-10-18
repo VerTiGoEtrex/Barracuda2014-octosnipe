@@ -84,7 +84,7 @@ ostream& operator<<(ostream &os, const game_state &gs) {
 	os << "Game id: " << gs.game_id << endl;
 	os << "Opponent id: " << gs.opponent_id << endl;
 	os << "Player number: " << gs.player_number << endl;
-	os << "Remaining time: " << gs.time_remaining_ns << endl;
+	os << "Remaining time: " << gs.time_remaining_ns/1000000 << endl;
 	os << "Number of legal moves: " << gs.legal_moves.size() << endl;
 	os << "Our points: " << gs.your_points << endl;
 	os << "Our tokens: " << gs.your_tokens << endl;
