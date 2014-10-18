@@ -25,7 +25,9 @@ struct Tetrahedron {
 	std::vector<Owner> locations;
 	int dim;
 
-	Tetrahedron(int dim) : dim(dim), locations(getCoord(0, 0, dim-1)) {}
+	Tetrahedron(int dim) : dim(dim) {
+		locations.resize(getCoord(0, 0, dim-1) + 1);
+	}
 	Tetrahedron() : dim(0), locations() {}
 
 	Tetrahedron(const Tetrahedron& other)
@@ -55,7 +57,7 @@ struct Tetrahedron {
 		coord += (dim*(dim+1)*(dim+2))/6 - (levelDim*(levelDim+1)*(levelDim+2))/6;
 
 		// Handle the y offset
-		coord += ((levelDim + (levelDim - y + 1)) * levelDim) / 2;
+		coord += ((levelDim + (levelDim - y + 1)) * y) / 2;
 
 		// Handle the x offset
 		coord += x;
