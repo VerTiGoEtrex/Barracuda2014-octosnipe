@@ -8,14 +8,16 @@
 #include <utility>
 
 enum class Owner {
-	WHITE,
-	BLACK,
-	UNOWNED
+	WHITE = 0,
+	BLACK = 1,
+	UNOWNED = 2
 };
 
 struct Move {
 	bool claim; // Wait when claim == false
 	int x, y, z;
+	Move() : claim(false){}
+	Move(x, y, z) : claim(true), x(x), y(y), z(z){}
 };
 
 class Tetrahedron {
@@ -47,12 +49,6 @@ public:
 	Owner& getOwner(int x, int y, int z) {
 		return locations.get()[getCoord(x, y, z)];
 	}
-private:
-	void swap (Tetrahedron& other) {
-		std::swap(locations, other.locations);
-		std::swap(dim, other.dim);
-		std::swap(locationsLen, other.locationsLen);
-	}
 	int getCoord(int x, int y, int z) {
 		assert ((x+y+z) < dim);
 
@@ -70,23 +66,36 @@ private:
 
 		return coord;
 	}
+	int getDim() {
+		return dim;
+	}
+	std::unique_ptr<Owner> locations;
+private:
+	void swap (Tetrahedron& other) {
+		std::swap(locations, other.locations);
+		std::swap(dim, other.dim);
+		std::swap(locationsLen, other.locationsLen);
+	}
+
 	int dim;
 	int locationsLen;
-	std::unique_ptr<Owner> locations;
+
 
 };
 
 class GameTreeState {
 public:
+	GameTreeState();
 	GameTreeState(GameTreeState& original);
 	int getHeuristicValue();
-	std::vector<Move> getMoves();
-	void applyMove(Move m);
+	std::vector<Move> getMoves()
+	void applyMove(Move &m);
 	Owner getTurn();
 	bool gameOver();
 private:
+	bool canClaim(Owner &owner, unique_ptr<bool*> &validBall);
 	Owner turn;
-
+	int tokens[2];
 	Tetrahedron state;
 };
 
