@@ -8,6 +8,18 @@
 
 using namespace std;
 
+GameTreeState::GameTreeState() {
+	turnsLeft = 99;
+	turn = Owner::WHITE;
+	tokens[0] = 5;
+	tokens[1] = 5;
+
+	state = Tetrahedron(10);
+	for (int i = 0; i < state.locations.size(); ++i) {
+		state.locations[i] = Owner::UNOWNED;
+	}
+}
+
 GameTreeState::GameTreeState(game_state &gameState) {
 	turnsLeft = gameState.moves_remaining;
 	turn = Owner::WHITE;
@@ -32,7 +44,7 @@ GameTreeState::GameTreeState(game_state &gameState) {
 }
 
 GameTreeState::GameTreeState(GameTreeState &original) :
-		turn(original.turn), state(original.state) {
+		turn(original.turn), state(original.state), turnsLeft(original.turnsLeft) {
 	copy(original.tokens, original.tokens + 2, tokens);
 }
 
@@ -42,11 +54,7 @@ int GameTreeState::getHeuristicValue() {
 
 
 	int h = 0;
-	int unfilledBot = ((dim+1) * dim) / 2;
 	for (int i = 0; i < validBallLen; ++i) {
-		if (i < ((dim+1) * dim) / 2 && state.locations[i] != Owner::UNOWNED) {
-			--unfilledBot;
-		}
 		if (state.locations[i] == Owner::WHITE) {
 			++h;
 		} else if (state.locations[i] == Owner::BLACK) {
@@ -54,7 +62,7 @@ int GameTreeState::getHeuristicValue() {
 		}
 	}
 
-	if (!unfilledBot || !turnsLeft) {
+	if (gameOver()) {
 		if (h > 0)
 			return 10000;
 		else
@@ -73,7 +81,7 @@ void GameTreeState::applyMove(Move &m) {
 		for (int z = 0; z <= m.z; ++z) {
 			for (int y = m.y; y <= m.y + m.z - z; ++y) {
 				for (int x = m.x; x <= m.x + m.y - y + m.z - z; ++x) {
-					auto& ballOwner = state.owner(x, y, z);
+					Owner& ballOwner = state.owner(x, y, z);
 					assert(ballOwner == turn || ballOwner == Owner::UNOWNED);
 					ballOwner = turn;
 				}
@@ -103,8 +111,8 @@ std::vector<Move> GameTreeState::getMoves() {
 
 	// Figure out what we can claim
 	int dim = state.getDim();
-	int validBallLen = state.getCoord(0, 0, dim - 1) + 1;
-	unique_ptr<bool> validBall(new bool[validBallLen]);
+	int validBallLen = state.locations.size();
+	vector<bool> validBall(validBallLen, false);
 
 	// Fill in the table
 	for (int z = 0; z < min(dim, tokens[turn]); ++z) {
@@ -118,21 +126,21 @@ std::vector<Move> GameTreeState::getMoves() {
 						//Square can be claimed
 						moves.push_back(Move(x, y, z));
 					}
-					validBall.get()[state.getCoord(x, y, z)] = (owner == turn
+					validBall[state.getCoord(x, y, z)] = (owner == turn
 							|| owner == Owner::UNOWNED);
 				} else {
 					// Z > 0 is harder, check if the balls under us are unclaimed OR owned by us
 					// and this call is unclaimed
-					if (validBall.get()[state.getCoord(x, y, z - 1)]
-							&& validBall.get()[state.getCoord(x + 1, y, z - 1)]
-							&& validBall.get()[state.getCoord(x, y + 1, z - 1)]) {
+					if (validBall[state.getCoord(x, y, z - 1)]
+							&& validBall[state.getCoord(x + 1, y, z - 1)]
+							&& validBall[state.getCoord(x, y + 1, z - 1)]) {
 						if (owner == Owner::UNOWNED) {
 							moves.push_back(Move(x, y, z));
 						}
-						validBall.get()[state.getCoord(x, y, z)] = (owner == turn
+						validBall[state.getCoord(x, y, z)] = (owner == turn
 								|| owner == Owner::UNOWNED);
 					} else {
-						validBall.get()[state.getCoord(x, y, z)] = false;
+						validBall[state.getCoord(x, y, z)] = false;
 					}
 				}
 			}
@@ -149,14 +157,15 @@ bool GameTreeState::gameOver(){
 	if (!turnsLeft) {
 		return true;
 	}
+
 	int dim = state.getDim();
 	int h = 0;
 	int unfilledBot = ((dim+1) * dim) / 2;
 	for (int i = 0; i < unfilledBot; ++i) {
-		if (state.locations[i] != Owner::UNOWNED) {
-			--unfilledBot;
+		if (state.locations[i] == Owner::UNOWNED) {
+			return false;
 		}
 	}
-	return !unfilledBot;
+	return true;
 }
 

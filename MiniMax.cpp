@@ -19,13 +19,14 @@ pair<int, Move> getBestMove(GameTreeState& state, int maxDepth) {
 	// Iterate over all of our moves and pick the best one.
 	// Alpha represents the best so far that we (white) can guarantee.
 	// Beta represents the best they can do.
-	for (Move m: state.getMoves()) {
+	auto moves = state.getMoves();
+	for (auto it = moves.rbegin(); it != moves.rend(); ++it) {
 		GameTreeState newState {state};
-		newState.applyMove(m);
-		int score = minimax(state, maxDepth - 1, alpha, beta);
+		newState.applyMove(*it);
+		int score = minimax(newState, maxDepth - 1, alpha, beta);
 		if (score > alpha) {
 			alpha = score;
-			bestMove = m;
+			bestMove = *it;
 		}
 	}
 
@@ -43,7 +44,9 @@ int minimax(GameTreeState& state, int remainingDepth, int alpha, int beta) {
 		// Maximize
 		int bestSoFar = numeric_limits<int>::min();
 
-		for (Move m: state.getMoves()) {
+		auto moves = state.getMoves();
+		for (auto it = moves.rbegin(); it != moves.rend(); ++it) {
+			auto m = *it;
 			GameTreeState newState {state};
 			newState.applyMove(m);
 			int newValue = minimax(newState, remainingDepth - 1, alpha, beta);
@@ -62,7 +65,9 @@ int minimax(GameTreeState& state, int remainingDepth, int alpha, int beta) {
 		// Minimize
 		int worstSoFar = numeric_limits<int>::max();
 
-		for (Move m: state.getMoves()) {
+		auto moves = state.getMoves();
+		for (auto it = moves.rbegin(); it != moves.rend(); ++it) {
+			auto m = *it;
 			GameTreeState newState {state};
 			newState.applyMove(m);
 			int newValue = minimax(newState, remainingDepth - 1, alpha, beta);
@@ -72,7 +77,7 @@ int minimax(GameTreeState& state, int remainingDepth, int alpha, int beta) {
 				return newValue;
 
 			worstSoFar = min(worstSoFar, newValue);
-			beta = min(worstSoFar, newValue);
+			beta = min(beta, newValue);
 		}
 		return worstSoFar;
 	}
