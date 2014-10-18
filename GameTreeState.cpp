@@ -14,7 +14,6 @@ GameTreeState::GameTreeState() {
 	tokens[0] = 1;
 	tokens[1] = 1;
 
-	state = Tetrahedron(1);
 	for (int i = 0; i < state.locations.size(); ++i) {
 		state.locations[i] = Owner::UNOWNED;
 	}
@@ -27,7 +26,6 @@ GameTreeState::GameTreeState(game_state &gameState) {
 	tokens[Owner::BLACK] = gameState.their_tokens;
 
 	//Setup the board
-	state = Tetrahedron(gameState.board.size());
 	for (int x = 0; x < gameState.board.size(); ++x) {
 		for (int y = 0; y < gameState.board[x].size(); ++y) {
 			for (int z = 0; z < gameState.board[x][y].size(); ++z) {
